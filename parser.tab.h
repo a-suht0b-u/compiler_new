@@ -116,22 +116,24 @@ extern int yydebug;
     DPLUS_POSTFIX = 317,           /* DPLUS_POSTFIX  */
     DMINUS_PREFIX = 318,           /* DMINUS_PREFIX  */
     DMINUS_POSTFIX = 319,          /* DMINUS_POSTFIX  */
-    FUNC_CALL = 320,               /* FUNC_CALL  */
-    ARGS = 321,                    /* ARGS  */
-    FUNCTION = 322,                /* FUNCTION  */
-    PARAM = 323,                   /* PARAM  */
-    ARG = 324,                     /* ARG  */
-    CALL = 325,                    /* CALL  */
-    LABEL = 326,                   /* LABEL  */
-    GOTO = 327,                    /* GOTO  */
-    JLT = 328,                     /* JLT  */
-    JLE = 329,                     /* JLE  */
-    JGT = 330,                     /* JGT  */
-    JGE = 331,                     /* JGE  */
-    EQ = 332,                      /* EQ  */
-    NEQ = 333,                     /* NEQ  */
-    UMINUS = 334,                  /* UMINUS  */
-    LOWER_THEN_ELSE = 335          /* LOWER_THEN_ELSE  */
+    ARRAY = 320,                   /* ARRAY  */
+    ARRAY_LIST = 321,              /* ARRAY_LIST  */
+    FUNC_CALL = 322,               /* FUNC_CALL  */
+    ARGS = 323,                    /* ARGS  */
+    FUNCTION = 324,                /* FUNCTION  */
+    PARAM = 325,                   /* PARAM  */
+    ARG = 326,                     /* ARG  */
+    CALL = 327,                    /* CALL  */
+    LABEL = 328,                   /* LABEL  */
+    GOTO = 329,                    /* GOTO  */
+    JLT = 330,                     /* JLT  */
+    JLE = 331,                     /* JLE  */
+    JGT = 332,                     /* JGT  */
+    JGE = 333,                     /* JGE  */
+    EQ = 334,                      /* EQ  */
+    NEQ = 335,                     /* NEQ  */
+    UMINUS = 336,                  /* UMINUS  */
+    LOWER_THEN_ELSE = 337          /* LOWER_THEN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -148,7 +150,7 @@ union YYSTYPE
 	char   type_id[32];
 	struct ASTNode *ptr;
 
-#line 152 "parser.tab.h"
+#line 154 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

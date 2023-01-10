@@ -50,6 +50,7 @@ typedef struct ASTNode
         struct ASTNode *Def;       // 复合语句定义
         struct ASTNode *Dec;       // 外部或局部变量
         struct ASTNode *Stm;       // 语句
+        struct ASTNode *Arr;
     };
     union
     {                              // 第2指针域
@@ -62,6 +63,7 @@ typedef struct ASTNode
         struct ASTNode *RightExp;  // 双目运算左左操作数表达式
         struct ASTNode *Exp2;      // 表达式2
         struct ASTNode *ID;        // 标识符
+        struct ASTNode *ArrList;
     };
     union
     {                            // 第3指针域

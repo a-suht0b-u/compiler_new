@@ -22,7 +22,7 @@ int yylex();
 };
 
 //  %type 定义非终结符的语义值类型
-%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args
+%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args ArrayList
 
 //% token 定义终结符的语义值类型
 %token <type_int> INT              /*指定INT的语义值是type_int，有词法分析得到的数值*/
@@ -31,10 +31,10 @@ int yylex();
 %token <type_char> CHAR            /*指定CHAR的语义值是type_char，有词法分析得到的数值*/
 
 
-%token DPLUS DMINUS GE GT LE LP LT NE RP LB RB LC RC SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
+%token DPLUS DMINUS GE GT LE LP LT NE RP LB RB LC RC  SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
 %token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE INCREASE DECREASE
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
-%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX
+%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX ARRAY ARRAY_LIST
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
 
 
@@ -78,6 +78,13 @@ ExtDecList:  VarDec      {$$=$1;}       /*每一个EXT_DECLIST的结点，其第
            ;  
 VarDec:  ID          {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ID;
                                $$->pos=yylineno; strcpy($$->type_id,$1);}                    //ID结点，标识符符号串存放结点的type_id
+         | ID ArrayList	{$$=(ASTNode *)malloc(sizeof(ASTNode)); 
+         $$->kind=ARRAY;strcpy($$->type_id,$1); 
+         $$->Arr=$2;}//数组声名
+         ;
+ArrayList:	LB INT RB	{$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_LIST;$$->type_int=$2;$$->Arr=$2;} //匹配数组的 [?]
+		| LB INT RB ArrayList {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_LIST;$$->type_int=$2;$$->Arr=$2;$$->ArrList=$4;}
+			;                      
          ;
 FuncDec: ID LP VarList RP     {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FUNC_DEC;
                                $$->pos=yylineno;   strcpy($$->type_id,$1); $$->ParamList=$3;}  //函数名（存放在$$->type_id）和形参的结点
@@ -177,9 +184,9 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
                                $$->pos=yylineno; $$->type=FLOAT; $$->type_float=$1;}    //浮点常量
       | CHAR         {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CHAR;
                       $$->pos=yylineno; $$->type=CHAR;$$->type_char=$1;} //字符常量
-       |	BREAK		{$$=(ASTNode *)malloc(sizeof(ASTNode));
+      |	BREAK	 {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=BREAK;
                       $$->pos=yylineno;$$->type=BREAK;}
-	 |	CONTINUE	{$$=(ASTNode *)malloc(sizeof(ASTNode));
+      |	CONTINUE	{$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CONTINUE;
                       $$->pos=yylineno;$$->type=CONTINUE;}
       ;
 Args:    Exp COMMA Args    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARGS;

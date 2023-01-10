@@ -150,6 +150,8 @@ void display(struct ASTNode *T, int indent)
             {
                 if (T0->Dec->kind == ID)
                     printf("%*c %s\n", indent + 6, ' ', T0->Dec->type_id);
+                else if (T0->Dec->kind == ARRAY)
+                    display(T0->Dec, indent + 6);
                 else if (T0->Dec->kind == ASSIGNOP)
                 {
                     printf("%*c %s ASSIGNOP\n ", indent + 6, ' ', T0->Dec->Dec->type_id);
@@ -157,6 +159,14 @@ void display(struct ASTNode *T, int indent)
                 }
                 T0 = T0->DecList;
             }
+            break;
+        case ARRAY:
+            printf("%*cID： %s\n", indent, ' ', T->type_id);
+            display(T->Arr, indent);
+            break;
+        case ARRAY_LIST:
+            printf("%*c维数：%d\n", indent, ' ', T->type_int);
+            display(T->ArrList, indent);
             break;
         case ID:
             printf("%*cID： %s\n", indent, ' ', T->type_id);

@@ -59,6 +59,8 @@ charconst (\'[^\n]\')
 ")"			{return RP;}
 "{"			{return LC;}
 "}"			{return RC;}
+"["			{return LB;}
+"]"			{return RB;}
 {intconst}      {yylval.type_int=atoi(yytext); return INT;}
 {floatconst}     {yylval.type_float=atof(yytext);     return FLOAT;}
 {charconst}      {yylval.type_char=*(yytext+1); return CHAR;}//增加了 char
