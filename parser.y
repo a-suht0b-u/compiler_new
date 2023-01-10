@@ -22,7 +22,7 @@ int yylex();
 };
 
 //  %type 定义非终结符的语义值类型
-%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args ArrayList
+%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args ArrayList ArrayValList 
 
 //% token 定义终结符的语义值类型
 %token <type_int> INT              /*指定INT的语义值是type_int，有词法分析得到的数值*/
@@ -34,21 +34,23 @@ int yylex();
 %token DPLUS DMINUS GE GT LE LP LT NE RP LB RB LC RC  SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
 %token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE INCREASE DECREASE
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
-%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX ARRAY ARRAY_LIST
+%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX ARRAY ARRAY_LIST ARRAY_VAL ARRAY_VAL_LIST
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
 
-
+%left COMMA
+%left ID INT FLOAT CHAR
 %left ASSIGNOP
 %left OR
 %left AND
 %left RELOP
 %left PLUS MINUS
 %left STAR DIV
+%left LM RM LP RP LC RC
 %right UMINUS NOT DPLUS DMINUS
 
 %nonassoc LOWER_THEN_ELSE
 %nonassoc ELSE
-
+%nonassoc BREAK CONTINUE
 
 %%
 
@@ -123,7 +125,7 @@ Stm:   Exp SEMI    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=EXP_STMT;
                                           $$->pos=$3->pos;   $$->Def=$3;$$->Exp2=$4;$$->Exp3=$6;$$->Body=$8;}
       ;
 
-DefList: {$$=NULL; }
+DefList: %prec ID {$$=NULL; }
         | Def DefList      {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DEF_LIST;   
                     if ($1) $$->pos=$1->pos; else $$->pos=yylineno;     $$->Def=$1;$$->DefList=$2;} //局部变量定义语句序列
         | error SEMI   {$$=NULL;}
@@ -188,7 +190,13 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
                       $$->pos=yylineno;$$->type=BREAK;}
       |	CONTINUE	{$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CONTINUE;
                       $$->pos=yylineno;$$->type=CONTINUE;}
+       | LC ArrayValList RC {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL;
+                      $$->pos=yylineno;$$->ArrVal=$2;}
       ;
+ArrayValList: ArrayValList COMMA Exp {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_LIST;$$->ArrVal=$1;$$->ArrValList=$3;
+                      $$->pos=yylineno;}
+                | Exp {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_LIST;$$->ArrVal=$1;
+                      $$->pos=yylineno;}
 Args:    Exp COMMA Args    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARGS;
                                                $$->pos=yylineno;  $$->Exp1=$1;$$->Args=$3;} 
 

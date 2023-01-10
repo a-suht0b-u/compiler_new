@@ -13,11 +13,11 @@ int fibo(int a)
 int main()
 {
 	int g[5][6];
+	int h[3] = {1, 2, 3};
 	char pp, qq;
 	int m, n, i;
 	int z = 0;
-	pp = '\'';
-	qq = ".";
+	pp ='\'; qq = ".";
 	m = read();
 	i = 1;
 
@@ -40,6 +40,8 @@ int main()
 		i = i + 1;
 		continue;
 	}
+
+	d = {2, 3};
 
 	return 1;
 }

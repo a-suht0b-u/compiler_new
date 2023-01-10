@@ -118,22 +118,26 @@ extern int yydebug;
     DMINUS_POSTFIX = 319,          /* DMINUS_POSTFIX  */
     ARRAY = 320,                   /* ARRAY  */
     ARRAY_LIST = 321,              /* ARRAY_LIST  */
-    FUNC_CALL = 322,               /* FUNC_CALL  */
-    ARGS = 323,                    /* ARGS  */
-    FUNCTION = 324,                /* FUNCTION  */
-    PARAM = 325,                   /* PARAM  */
-    ARG = 326,                     /* ARG  */
-    CALL = 327,                    /* CALL  */
-    LABEL = 328,                   /* LABEL  */
-    GOTO = 329,                    /* GOTO  */
-    JLT = 330,                     /* JLT  */
-    JLE = 331,                     /* JLE  */
-    JGT = 332,                     /* JGT  */
-    JGE = 333,                     /* JGE  */
-    EQ = 334,                      /* EQ  */
-    NEQ = 335,                     /* NEQ  */
-    UMINUS = 336,                  /* UMINUS  */
-    LOWER_THEN_ELSE = 337          /* LOWER_THEN_ELSE  */
+    ARRAY_VAL = 322,               /* ARRAY_VAL  */
+    ARRAY_VAL_LIST = 323,          /* ARRAY_VAL_LIST  */
+    FUNC_CALL = 324,               /* FUNC_CALL  */
+    ARGS = 325,                    /* ARGS  */
+    FUNCTION = 326,                /* FUNCTION  */
+    PARAM = 327,                   /* PARAM  */
+    ARG = 328,                     /* ARG  */
+    CALL = 329,                    /* CALL  */
+    LABEL = 330,                   /* LABEL  */
+    GOTO = 331,                    /* GOTO  */
+    JLT = 332,                     /* JLT  */
+    JLE = 333,                     /* JLE  */
+    JGT = 334,                     /* JGT  */
+    JGE = 335,                     /* JGE  */
+    EQ = 336,                      /* EQ  */
+    NEQ = 337,                     /* NEQ  */
+    LM = 338,                      /* LM  */
+    RM = 339,                      /* RM  */
+    UMINUS = 340,                  /* UMINUS  */
+    LOWER_THEN_ELSE = 341          /* LOWER_THEN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -150,7 +154,7 @@ union YYSTYPE
 	char   type_id[32];
 	struct ASTNode *ptr;
 
-#line 154 "parser.tab.h"
+#line 158 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

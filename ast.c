@@ -168,6 +168,15 @@ void display(struct ASTNode *T, int indent)
             printf("%*c维数：%d\n", indent, ' ', T->type_int);
             display(T->ArrList, indent);
             break;
+        case ARRAY_VAL:
+            printf("%*c%c\n", indent, ' ', '{'); // 数组括号
+            display(T->ArrVal, indent + 3);
+            printf("%*c%c\n", indent, ' ', '}');
+            break;
+        case ARRAY_VAL_LIST:
+            display(T->ArrVal, indent); // 数组的值
+            display(T->ArrValList, indent);
+            break;
         case ID:
             printf("%*cID： %s\n", indent, ' ', T->type_id);
             break;

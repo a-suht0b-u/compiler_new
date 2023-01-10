@@ -51,6 +51,7 @@ typedef struct ASTNode
         struct ASTNode *Dec;       // 外部或局部变量
         struct ASTNode *Stm;       // 语句
         struct ASTNode *Arr;
+        struct ASTNode *ArrVal;
     };
     union
     {                              // 第2指针域
@@ -64,6 +65,7 @@ typedef struct ASTNode
         struct ASTNode *Exp2;      // 表达式2
         struct ASTNode *ID;        // 标识符
         struct ASTNode *ArrList;
+        struct ASTNode *ArrValList;
     };
     union
     {                            // 第3指针域
