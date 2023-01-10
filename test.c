@@ -6,9 +6,13 @@ int fibo(int a) {
 		return 1;
 return fibo(a-1)+fibo(a-2);
 }
-int main(){
+int main(){	
 	int m,n,i;
+	char pp,qq;
+	pp='\';
+	qq=".";
 	m=read();
+	
 	i=1;
 	while(i<=m)
 	{

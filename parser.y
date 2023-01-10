@@ -16,6 +16,7 @@ int yylex();
 %union {
 	int    type_int;
 	float  type_float;
+        char   type_char;
 	char   type_id[32];
 	struct ASTNode *ptr;
 };
@@ -26,11 +27,9 @@ int yylex();
 //% token 定义终结符的语义值类型
 %token <type_int> INT              /*指定INT的语义值是type_int，有词法分析得到的数值*/
 %token <type_id> ID  RELOP TYPE    /*指定ID,RELOP 的语义值是type_id，有词法分析得到的标识符字符串*/
-
-
-
 %token <type_float> FLOAT          /*指定ID的语义值是type_id，有词法分析得到的标识符字符串*/
-    
+%token <type_char> CHAR            /*指定CHAR的语义值是type_char，有词法分析得到的数值*/
+
 
 %token DPLUS GE GT LE LP LT NE RP LB RB LC RC SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
 %token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT 
@@ -67,7 +66,10 @@ ExtDef:   Specifier ExtDecList SEMI   {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$
          | error SEMI   {$$=NULL;}
          ;
 Specifier:  TYPE    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=TYPE;             //生成类型结点，目前仅基本类型
-	             $$->pos=yylineno; strcpy($$->type_id,$1);$$->type=!strcmp($1,"int")?INT:FLOAT;}   
+	             $$->pos=yylineno; strcpy($$->type_id,$1);
+                      if(!strcmp($1,"int")) $$->type=INT;
+                      if(!strcmp($1,"float")) $$->type=FLOAT;
+                      if(!strcmp($1,"char")) $$->type=CHAR;}   
               ;
     
 ExtDecList:  VarDec      {$$=$1;}       /*每一个EXT_DECLIST的结点，其第一棵子树对应一个变量名(ID类型的结点),第二棵子树对应剩下的外部变量名*/
@@ -166,7 +168,9 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
       | INT          {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=INT;
                                $$->pos=yylineno;  $$->type=INT;$$->type_int=$1;}    //整型常量
       | FLOAT     {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FLOAT;
-                               $$->pos=yylineno; $$->type=FLOAT; $$->type_float=$1=$1;}    //浮点常量
+                               $$->pos=yylineno; $$->type=FLOAT; $$->type_float=$1;}    //浮点常量
+      | CHAR         {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CHAR;
+                      $$->pos=yylineno; $$->type=CHAR;$$->type_char=$1;} //字符常量
       ;
 Args:    Exp COMMA Args    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARGS;
                                                $$->pos=yylineno;  $$->Exp1=$1;$$->Args=$3;} 

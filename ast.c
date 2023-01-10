@@ -50,8 +50,25 @@ void display(struct ASTNode *T, int indent)
             display(T->ParamList, indent);
             break;
         case PARAM_DEC:
-            printf("%*c类型：%s, 参数名：%s\n", indent, ' ', T->Specifier->type == INT ? "int" : "float", T->ID->type_id);
+        {
+            char *ckind;
+            switch (T->Specifier->type)
+            {
+            case INT:
+                ckind = "int";
+                break;
+            case FLOAT:
+                ckind = "float";
+                break;
+            case CHAR:
+                ckind = "char"; // 增加了 char
+                break;
+            default:
+                break;
+            }
+            printf("%*c类型：%s, 参数名：%s\n", indent, ' ', ckind, T->ID->type_id);
             break;
+        }
         case EXP_STMT:
             printf("%*c表达式语句：(%d)\n", indent, ' ', T->pos);
             display(T->Exp1, indent + 3);
@@ -132,6 +149,9 @@ void display(struct ASTNode *T, int indent)
             break;
         case FLOAT:
             printf("%*cFLAOT：%f\n", indent, ' ', T->type_float);
+            break;
+        case CHAR:
+            printf("%*cCHAR：%c\n", indent, ' ', T->type_char); // 增加了 char
             break;
         case ASSIGNOP:
         case AND:

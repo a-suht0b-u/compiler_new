@@ -14,7 +14,8 @@ int yycolumn=1;
 		   	   
 typedef union {
 	int type_int;
-	int type_float;
+	float type_float;
+	char type_char;
 	char type_id[32];
 	struct ASTNode *ptr;
 } YYLVAL;
@@ -26,23 +27,22 @@ int lastToken;
 id   [A-Za-z][A-Za-z0-9]*  
 intconst    [0-9]+
 floatconst  [0-9]*\.?[0-9]?([eE][-+]?[0-9]+)?
+charconst (\'[^\n]\')
 
 %%
 "int"       {strcpy(yylval.type_id,  yytext);return TYPE;}
 "float"     {strcpy(yylval.type_id,  yytext);return TYPE;}
-
+"char"      {strcpy(yylval.type_id,  yytext);return TYPE;}//增加了 char
 "return"    {return RETURN;}
 "if"        {return IF;}
 "else"      {return ELSE;}
 "while"     {return WHILE;}
 "for"       {return FOR;}
 
-
-
 {id}        {strcpy(yylval.type_id,  yytext); return ID;}
 ";"		  {return SEMI;}
 ","		  {return COMMA;}
-">"|"<"|">="|"<="|"=="|"!=" {strcpy(yylval.type_id, yytext);;return RELOP;}
+">"|"<"|">="|"<="|"=="|"!=" {strcpy(yylval.type_id, yytext);return RELOP;}
 "="			{return ASSIGNOP;}
 "++"			{return DPLUS;}
 "+"			{return PLUS;}
@@ -58,6 +58,7 @@ floatconst  [0-9]*\.?[0-9]?([eE][-+]?[0-9]+)?
 "}"			{return RC;}
 {intconst}      {yylval.type_int=atoi(yytext); return INT;}
 {floatconst}     {yylval.type_float=atof(yytext);     return FLOAT;}
+{charconst}      {yylval.type_char=*(yytext+1); return CHAR;}//增加了 char
 [ \r\t]     {}   
 
 [\n]            {yycolumn=1;}   
