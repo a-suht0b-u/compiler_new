@@ -27,14 +27,14 @@ int yylex();
 //% token 定义终结符的语义值类型
 %token <type_int> INT              /*指定INT的语义值是type_int，有词法分析得到的数值*/
 %token <type_id> ID  RELOP TYPE    /*指定ID,RELOP 的语义值是type_id，有词法分析得到的标识符字符串*/
-%token <type_float> FLOAT          /*指定ID的语义值是type_id，有词法分析得到的标识符字符串*/
+%token <type_float> FLOAT           /*指定FLOAT的语义值是type_float，有词法分析得到的数值*/
 %token <type_char> CHAR            /*指定CHAR的语义值是type_char，有词法分析得到的数值*/
 
 
-%token DPLUS GE GT LE LP LT NE RP LB RB LC RC SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
-%token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE
+%token DPLUS DMINUS GE GT LE LP LT NE RP LB RB LC RC SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
+%token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE INCREASE DECREASE
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
-%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE
+%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
 
 
@@ -44,7 +44,7 @@ int yylex();
 %left RELOP
 %left PLUS MINUS
 %left STAR DIV
-%right UMINUS NOT DPLUS
+%right UMINUS NOT DPLUS DMINUS
 
 %nonassoc LOWER_THEN_ELSE
 %nonassoc ELSE
@@ -112,8 +112,8 @@ Stm:   Exp SEMI    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=EXP_STMT;
                                           $$->pos=$3->pos;   $$->Cond=$3; $$->IfStm=$5;$$->ElseStm=$7;}
       | WHILE LP Exp RP Stm   {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=WHILE;
                                                $$->pos=$3->pos;   $$->Cond=$3; $$->Body=$5;}
-      | FOR LP Exp SEMI Exp SEMI Exp RP Stm {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FOR;
-                                          $$->pos=$3->pos;   $$->Exp1=$3;$$->Exp2=$5;$$->Exp3=$7;$$->Body=$9;}
+      | FOR LP Def Exp SEMI Exp RP Stm {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FOR;
+                                          $$->pos=$3->pos;   $$->Def=$3;$$->Exp2=$4;$$->Exp3=$6;$$->Body=$8;}
       ;
 
 DefList: {$$=NULL; }
@@ -157,8 +157,14 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
                                 $$->pos=yylineno;   $$->Exp1=$2;strcpy($$->type_id,"UMINUS");}
       | NOT Exp       {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=NOT;
                                 $$->pos=yylineno;   $$->Exp1=$2;strcpy($$->type_id,"NOT");}
-      | DPLUS  Exp       {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DPLUS;strcpy($$->type_id,"DPLUS");
-                                  $$->pos=yylineno;   $$->Exp1=$2;}  //这里仅有前缀，还需后缀形式，以及--
+      | DPLUS  Exp       {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DPLUS_PREFIX;strcpy($$->type_id,"DPLUS_PREFIX");
+                                  $$->pos=yylineno;   $$->Exp1=$2;}  //后自增
+      | Exp DPLUS      {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DPLUS_POSTFIX;strcpy($$->type_id,"DPLUS_POSTFIX");
+                                  $$->pos=yylineno;   $$->Exp1=$1;}//前自增
+	| DMINUS  Exp      {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DMINUS_PREFIX;strcpy($$->type_id,"DMINUS_PREFIX");
+                                  $$->pos=yylineno;  $$->Exp1=$2;}//后自减
+      | Exp DMINUS      {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=DMINUS_POSTFIX;strcpy($$->type_id,"DMINUS_POSTFIX");
+                                  $$->pos=yylineno;   $$->Exp1=$1;}//前自减                         
       | ID LP Args RP  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FUNC_CALL;
                                 $$->pos=yylineno; strcpy($$->type_id,$1);  $$->Args=$3;}
       | ID LP RP      {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=FUNC_CALL;

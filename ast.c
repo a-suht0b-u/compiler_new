@@ -95,7 +95,7 @@ void display(struct ASTNode *T, int indent)
             display(T->StmList, indent); // 显示剩下语句
             break;
         case WHILE:
-            printf("%*c循环语句：(%d)\n", indent, ' ', T->pos);
+            printf("%*cWHILE循环语句：(%d)\n", indent, ' ', T->pos);
             printf("%*c循环条件：\n", indent + 3, ' ');
             display(T->Cond, indent + 6); // 显示循环条件
             printf("%*c循环体：(%d)\n", indent + 3, ' ', T->pos);
@@ -104,7 +104,7 @@ void display(struct ASTNode *T, int indent)
         case FOR:
             printf("%*cFOR循环语句：(%d)\n", indent, ' ', T->pos);
             printf("%*c循环变量定义：\n", indent + 3, ' ');
-            display(T->Exp1, indent + 6); // 显示变量声名赋值
+            display(T->Def, indent + 6); // 显示变量声名赋值
             printf("%*c循环条件：\n", indent + 3, ' ');
             display(T->Exp2, indent + 6); // 显示循环条件
             printf("%*c更新语句：\n", indent + 3, ' ');
@@ -182,6 +182,10 @@ void display(struct ASTNode *T, int indent)
             display(T->Exp1, indent + 3);
             display(T->Exp2, indent + 3);
             break;
+        case DPLUS_PREFIX:
+        case DPLUS_POSTFIX:
+        case DMINUS_PREFIX:
+        case DMINUS_POSTFIX:
         case NOT:
         case UMINUS:
             printf("%*c%s\n", indent, ' ', T->type_id);

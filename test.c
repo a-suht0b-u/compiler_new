@@ -9,21 +9,33 @@ int fibo(int a)
 }
 int main()
 {
-	int m, n, i;
 	char pp, qq;
+	int m, n, i;
+	int z = 0;
 	pp = '\'';
+	qq = ".";
 	m = read();
 	i = 1;
 
-	for (i = 0; i < 2; i = i + 1)
+	i++;
+	i--;
+	++i;
+	--i;
+
+	i = ++i;
+
+	for (int z = 0, x = 6; z <= 10; z++)
 	{
-		read();
+		write(z);
+		break;
 	}
 	while (i <= m)
 	{
 		n = fibo(i);
 		write(n);
 		i = i + 1;
+		continue;
 	}
+
 	return 1;
 }

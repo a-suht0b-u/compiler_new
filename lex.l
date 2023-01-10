@@ -47,6 +47,7 @@ charconst (\'[^\n]\')
 ">"|"<"|">="|"<="|"=="|"!=" {strcpy(yylval.type_id, yytext);return RELOP;}
 "="			{return ASSIGNOP;}
 "++"			{return DPLUS;}
+"--"		{return DMINUS;}
 "+"			{return PLUS;}
 "-"			{return MINUS;}
 "*"			{return STAR;}
