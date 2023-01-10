@@ -32,7 +32,7 @@ int yylex();
 
 
 %token DPLUS GE GT LE LP LT NE RP LB RB LC RC SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
-%token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT 
+%token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
 %token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
@@ -171,6 +171,10 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
                                $$->pos=yylineno; $$->type=FLOAT; $$->type_float=$1;}    //浮点常量
       | CHAR         {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CHAR;
                       $$->pos=yylineno; $$->type=CHAR;$$->type_char=$1;} //字符常量
+       |	BREAK		{$$=(ASTNode *)malloc(sizeof(ASTNode));
+                      $$->pos=yylineno;$$->type=BREAK;}
+	 |	CONTINUE	{$$=(ASTNode *)malloc(sizeof(ASTNode));
+                      $$->pos=yylineno;$$->type=CONTINUE;}
       ;
 Args:    Exp COMMA Args    {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARGS;
                                                $$->pos=yylineno;  $$->Exp1=$1;$$->Args=$3;} 

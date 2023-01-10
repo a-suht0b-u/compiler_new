@@ -101,6 +101,23 @@ void display(struct ASTNode *T, int indent)
             printf("%*c循环体：(%d)\n", indent + 3, ' ', T->pos);
             display(T->Body, indent + 6); // 显示循环体
             break;
+        case FOR:
+            printf("%*cFOR循环语句：(%d)\n", indent, ' ', T->pos);
+            printf("%*c循环变量定义：\n", indent + 3, ' ');
+            display(T->Exp1, indent + 6); // 显示变量声名赋值
+            printf("%*c循环条件：\n", indent + 3, ' ');
+            display(T->Exp2, indent + 6); // 显示循环条件
+            printf("%*c更新语句：\n", indent + 3, ' ');
+            display(T->Exp3, indent + 6); // 显示更新语句
+            printf("%*c循环体：(%d)\n", indent + 3, ' ', T->pos);
+            display(T->Body, indent + 6); // 显示循环体
+            break;
+        case BREAK:
+            printf("%*cbreak中断返回语句(%d)\n", indent, ' ', T->pos);
+            break;
+        case CONTINUE:
+            printf("%*cCONTINUE跳出继续循环语句(%d)\n", indent, ' ', T->pos);
+            break;
         case IF_THEN:
             printf("%*c条件语句(IF_THEN)：(%d)\n", indent, ' ', T->pos);
             printf("%*c条件：\n", indent + 3, ' ');

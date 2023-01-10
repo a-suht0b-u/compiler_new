@@ -92,37 +92,39 @@ extern int yydebug;
     CASE = 293,                    /* CASE  */
     COLON = 294,                   /* COLON  */
     DEFAULT = 295,                 /* DEFAULT  */
-    EXT_DEF_LIST = 296,            /* EXT_DEF_LIST  */
-    EXT_VAR_DEF = 297,             /* EXT_VAR_DEF  */
-    FUNC_DEF = 298,                /* FUNC_DEF  */
-    FUNC_DEC = 299,                /* FUNC_DEC  */
-    EXT_DEC_LIST = 300,            /* EXT_DEC_LIST  */
-    PARAM_LIST = 301,              /* PARAM_LIST  */
-    PARAM_DEC = 302,               /* PARAM_DEC  */
-    VAR_DEF = 303,                 /* VAR_DEF  */
-    DEC_LIST = 304,                /* DEC_LIST  */
-    DEF_LIST = 305,                /* DEF_LIST  */
-    COMP_STM = 306,                /* COMP_STM  */
-    STM_LIST = 307,                /* STM_LIST  */
-    EXP_STMT = 308,                /* EXP_STMT  */
-    IF_THEN = 309,                 /* IF_THEN  */
-    IF_THEN_ELSE = 310,            /* IF_THEN_ELSE  */
-    FUNC_CALL = 311,               /* FUNC_CALL  */
-    ARGS = 312,                    /* ARGS  */
-    FUNCTION = 313,                /* FUNCTION  */
-    PARAM = 314,                   /* PARAM  */
-    ARG = 315,                     /* ARG  */
-    CALL = 316,                    /* CALL  */
-    LABEL = 317,                   /* LABEL  */
-    GOTO = 318,                    /* GOTO  */
-    JLT = 319,                     /* JLT  */
-    JLE = 320,                     /* JLE  */
-    JGT = 321,                     /* JGT  */
-    JGE = 322,                     /* JGE  */
-    EQ = 323,                      /* EQ  */
-    NEQ = 324,                     /* NEQ  */
-    UMINUS = 325,                  /* UMINUS  */
-    LOWER_THEN_ELSE = 326          /* LOWER_THEN_ELSE  */
+    BREAK = 296,                   /* BREAK  */
+    CONTINUE = 297,                /* CONTINUE  */
+    EXT_DEF_LIST = 298,            /* EXT_DEF_LIST  */
+    EXT_VAR_DEF = 299,             /* EXT_VAR_DEF  */
+    FUNC_DEF = 300,                /* FUNC_DEF  */
+    FUNC_DEC = 301,                /* FUNC_DEC  */
+    EXT_DEC_LIST = 302,            /* EXT_DEC_LIST  */
+    PARAM_LIST = 303,              /* PARAM_LIST  */
+    PARAM_DEC = 304,               /* PARAM_DEC  */
+    VAR_DEF = 305,                 /* VAR_DEF  */
+    DEC_LIST = 306,                /* DEC_LIST  */
+    DEF_LIST = 307,                /* DEF_LIST  */
+    COMP_STM = 308,                /* COMP_STM  */
+    STM_LIST = 309,                /* STM_LIST  */
+    EXP_STMT = 310,                /* EXP_STMT  */
+    IF_THEN = 311,                 /* IF_THEN  */
+    IF_THEN_ELSE = 312,            /* IF_THEN_ELSE  */
+    FUNC_CALL = 313,               /* FUNC_CALL  */
+    ARGS = 314,                    /* ARGS  */
+    FUNCTION = 315,                /* FUNCTION  */
+    PARAM = 316,                   /* PARAM  */
+    ARG = 317,                     /* ARG  */
+    CALL = 318,                    /* CALL  */
+    LABEL = 319,                   /* LABEL  */
+    GOTO = 320,                    /* GOTO  */
+    JLT = 321,                     /* JLT  */
+    JLE = 322,                     /* JLE  */
+    JGT = 323,                     /* JGT  */
+    JGE = 324,                     /* JGE  */
+    EQ = 325,                      /* EQ  */
+    NEQ = 326,                     /* NEQ  */
+    UMINUS = 327,                  /* UMINUS  */
+    LOWER_THEN_ELSE = 328          /* LOWER_THEN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -139,7 +141,7 @@ union YYSTYPE
 	char   type_id[32];
 	struct ASTNode *ptr;
 
-#line 143 "parser.tab.h"
+#line 145 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
