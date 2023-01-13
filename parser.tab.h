@@ -120,24 +120,27 @@ extern int yydebug;
     ARRAY_LIST = 321,              /* ARRAY_LIST  */
     ARRAY_VAL = 322,               /* ARRAY_VAL  */
     ARRAY_VAL_LIST = 323,          /* ARRAY_VAL_LIST  */
-    FUNC_CALL = 324,               /* FUNC_CALL  */
-    ARGS = 325,                    /* ARGS  */
-    FUNCTION = 326,                /* FUNCTION  */
-    PARAM = 327,                   /* PARAM  */
-    ARG = 328,                     /* ARG  */
-    CALL = 329,                    /* CALL  */
-    LABEL = 330,                   /* LABEL  */
-    GOTO = 331,                    /* GOTO  */
-    JLT = 332,                     /* JLT  */
-    JLE = 333,                     /* JLE  */
-    JGT = 334,                     /* JGT  */
-    JGE = 335,                     /* JGE  */
-    EQ = 336,                      /* EQ  */
-    NEQ = 337,                     /* NEQ  */
-    LM = 338,                      /* LM  */
-    RM = 339,                      /* RM  */
-    UMINUS = 340,                  /* UMINUS  */
-    LOWER_THEN_ELSE = 341          /* LOWER_THEN_ELSE  */
+    ARRAY_VAL_1 = 324,             /* ARRAY_VAL_1  */
+    ARRAY_VAL_N = 325,             /* ARRAY_VAL_N  */
+    FUNC_CALL = 326,               /* FUNC_CALL  */
+    ARGS = 327,                    /* ARGS  */
+    FUNCTION = 328,                /* FUNCTION  */
+    PARAM = 329,                   /* PARAM  */
+    ARG = 330,                     /* ARG  */
+    CALL = 331,                    /* CALL  */
+    LABEL = 332,                   /* LABEL  */
+    GOTO = 333,                    /* GOTO  */
+    JLT = 334,                     /* JLT  */
+    JLE = 335,                     /* JLE  */
+    JGT = 336,                     /* JGT  */
+    JGE = 337,                     /* JGE  */
+    EQ = 338,                      /* EQ  */
+    NEQ = 339,                     /* NEQ  */
+    LCOMMA = 340,                  /* LCOMMA  */
+    LM = 341,                      /* LM  */
+    RM = 342,                      /* RM  */
+    UMINUS = 343,                  /* UMINUS  */
+    LOWER_THEN_ELSE = 344          /* LOWER_THEN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -154,7 +157,7 @@ union YYSTYPE
 	char   type_id[32];
 	struct ASTNode *ptr;
 
-#line 158 "parser.tab.h"
+#line 161 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

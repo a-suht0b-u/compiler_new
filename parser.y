@@ -22,7 +22,7 @@ int yylex();
 };
 
 //  %type 定义非终结符的语义值类型
-%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args ArrayList ArrayValList 
+%type  <ptr>  program ExtDefList ExtDef  Specifier ExtDecList FuncDec CompSt VarList VarDec ParamDec Stm StmList DefList Def DecList Dec Exp Args ArrayList ArrayValList  ArrayValListN ArrayValList1
 
 //% token 定义终结符的语义值类型
 %token <type_int> INT              /*指定INT的语义值是type_int，有词法分析得到的数值*/
@@ -34,9 +34,10 @@ int yylex();
 %token DPLUS DMINUS GE GT LE LP LT NE RP LB RB LC RC  SEMI COMMA     /*用bison对该文件编译时，带参数-d，生成的exp.tab.h中给这些单词进行编码，可在lex.l中包含parser.tab.h使用这些单词种类码*/
 %token PLUS MINUS STAR DIV ASSIGNOP AND OR NOT IF ELSE WHILE RETURN STRUCT FOR SWITCH CASE COLON DEFAULT BREAK CONTINUE INCREASE DECREASE
 /*以下为接在上述token后依次编码的枚举常量，作为AST结点类型标记*/
-%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX ARRAY ARRAY_LIST ARRAY_VAL ARRAY_VAL_LIST
+%token EXT_DEF_LIST EXT_VAR_DEF FUNC_DEF FUNC_DEC EXT_DEC_LIST PARAM_LIST PARAM_DEC VAR_DEF DEC_LIST DEF_LIST COMP_STM STM_LIST EXP_STMT IF_THEN IF_THEN_ELSE DPLUS_PREFIX DPLUS_POSTFIX DMINUS_PREFIX DMINUS_POSTFIX ARRAY ARRAY_LIST ARRAY_VAL ARRAY_VAL_LIST ARRAY_VAL_1 ARRAY_VAL_N
 %token FUNC_CALL ARGS FUNCTION PARAM ARG CALL LABEL GOTO JLT JLE JGT JGE EQ NEQ
 
+%left LCOMMA
 %left COMMA
 %left ID INT FLOAT CHAR
 %left ASSIGNOP
@@ -190,9 +191,19 @@ Exp:    Exp ASSIGNOP Exp  {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ASSIG
                       $$->pos=yylineno;$$->type=BREAK;}
       |	CONTINUE	{$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=CONTINUE;
                       $$->pos=yylineno;$$->type=CONTINUE;}
-       | LC ArrayValList RC {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL;
+       | LC ArrayValListN RC {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL;
                       $$->pos=yylineno;$$->ArrVal=$2;}
       ;
+ArrayValListN: ArrayValListN COMMA ArrayValList1 {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_N;
+                      $$->pos=yylineno;$$->ArrVal=$1;$$->ArrValList=$3;}
+			| ArrayValList1 {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_1;
+                      $$->pos=yylineno;$$->ArrVal=$1;}
+			| ArrayValList %prec LCOMMA {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_1;
+                      $$->pos=yylineno;$$->ArrVal=$1;}//一维数组
+			;
+ArrayValList1:	LC ArrayValList RC	{$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL;
+                      $$->pos=yylineno;$$->ArrVal=$2;}
+			;
 ArrayValList: ArrayValList COMMA Exp {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_LIST;$$->ArrVal=$1;$$->ArrValList=$3;
                       $$->pos=yylineno;}
                 | Exp {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=ARRAY_VAL_LIST;$$->ArrVal=$1;

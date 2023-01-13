@@ -155,7 +155,7 @@ void display(struct ASTNode *T, int indent)
                 else if (T0->Dec->kind == ASSIGNOP)
                 {
                     printf("%*c %s ASSIGNOP\n ", indent + 6, ' ', T0->Dec->Dec->type_id);
-                    display(T0->Dec->Exp1, indent + strlen(T0->Dec->Dec->type_id) + 7); // 显示初始化表达式
+                    display(T0->Dec->RightExp, indent + strlen(T0->Dec->Dec->type_id) + 7); // 显示初始化表达式
                 }
                 T0 = T0->DecList;
             }
@@ -176,6 +176,13 @@ void display(struct ASTNode *T, int indent)
         case ARRAY_VAL_LIST:
             display(T->ArrVal, indent); // 数组的值
             display(T->ArrValList, indent);
+            break;
+        case ARRAY_VAL_N:
+            display(T->ArrVal, indent); // 数组的值
+            display(T->ArrValList, indent);
+            break;
+        case ARRAY_VAL_1:
+            display(T->ArrVal, indent);
             break;
         case ID:
             printf("%*cID： %s\n", indent, ' ', T->type_id);

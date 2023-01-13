@@ -14,10 +14,12 @@ int main()
 {
 	int g[5][6];
 	int h[3] = {1, 2, 3};
+	int m[2][3] = {{1, 2, 3}, {4, 5, 6}};
 	char pp, qq;
 	int m, n, i;
 	int z = 0;
-	pp ='\'; qq = ".";
+	pp ='\'; 
+	qq = ".";
 	m = read();
 	i = 1;
 
@@ -42,6 +44,7 @@ int main()
 	}
 
 	d = {2, 3};
+	e = {{2, 3, 4}, {5, 6, 7}};
 
 	return 1;
 }
