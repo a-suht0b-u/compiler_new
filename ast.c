@@ -13,8 +13,8 @@ void display(struct ASTNode *T, int indent)
         switch (T->kind)
         {
         case EXT_DEF_LIST:
-            display(T->Def, indent);     // 显示该外部定义（外部变量和函数）列表中的第一个
-            display(T->DefList, indent); // 显示该外部定义列表中的其它外部定义
+            display(T->Def, indent + 3);     // 显示该外部定义（外部变量和函数）列表中的第一个
+            display(T->DefList, indent + 3); // 显示该外部定义列表中的其它外部定义
             break;
         case EXT_VAR_DEF:
             printf("%*c外部变量定义：(%d)\n", indent, ' ', T->pos);

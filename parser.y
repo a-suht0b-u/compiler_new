@@ -55,7 +55,7 @@ int yylex();
 
 %%
 
-program: ExtDefList    { display($1,0); }     //显示语法树,语义分析 semantic_Analysis0($1);
+program: ExtDefList    { printf("程序体：\n");display($1,0); }     //显示语法树,语义分析 semantic_Analysis0($1);
          ; 
 ExtDefList: {$$=NULL;}
           | ExtDef ExtDefList {$$=(ASTNode *)malloc(sizeof(ASTNode)); $$->kind=EXT_DEF_LIST;

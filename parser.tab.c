@@ -1711,7 +1711,7 @@ yyreduce:
     {
   case 2: /* program: ExtDefList  */
 #line 58 "parser.y"
-                       { display((yyvsp[0].ptr),0); }
+                       { printf("程序体：\n");display((yyvsp[0].ptr),0); }
 #line 1716 "parser.tab.c"
     break;
 
